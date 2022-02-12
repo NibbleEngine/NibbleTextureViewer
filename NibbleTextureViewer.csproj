@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<OutputType>Exe</OutputType>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <TargetFramework>net5.0</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	<LangVersion>9.0</LangVersion>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	<BaseOutputPath>..\Build</BaseOutputPath>
+	<SelfContained>false</SelfContained>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="$(SolutionDir)Resources\default.dds" />
+    <EmbeddedResource Include="$(SolutionDir)Resources\default_mask.dds" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NibbleDLL\NibbleDLL.csproj" />
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <Reference Include="ImGui.NET">
+      <HintPath>..\lib\ImGui.NET.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+	
+</Project>
