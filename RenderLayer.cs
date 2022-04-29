@@ -128,7 +128,7 @@ namespace NibbleTextureViewer
         {
             //First argument should be the input state
             NbMouseState mouseState = (NbMouseState) data.Dequeue();
-            NbCore.Platform.Graphics.GraphicsAPI renderer = EngineRef.GetSystem<NbCore.Systems.RenderingSystem>().Renderer;
+            GraphicsAPI renderer = EngineRef.GetSystem<NbCore.Systems.RenderingSystem>().Renderer;
 
             //Compile updated shaders
            //Re-Compile requested shaders

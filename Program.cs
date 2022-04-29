@@ -7,7 +7,6 @@ using OpenTK;
 using NbCore.UI.ImGui;
 using NbCore.Common;
 using NbCore.Platform.Graphics.OpenGL;
-using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common;
 using ImGuiNET;
 using System.Collections.Generic;
