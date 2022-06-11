@@ -29,6 +29,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\default.dds" />
     <EmbeddedResource Include="Resources\default_mask.dds" />
+	<EmbeddedResource Include="Resources\Roboto-Medium.ttf" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,15 +38,26 @@
     <PackageReference Include="SixLabors.ImageSharp" Version="2.1.1" />
   </ItemGroup>
 	
-  <ItemGroup>
+	
+  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|AnyCPU'">
 	<Reference Include="ImGui.NET">
       <HintPath>lib\ImGui.NET.dll</HintPath>
     </Reference>
+	<ProjectReference Include="..\NibbleDLL\NibbleDLL\NibbleDLL.csproj">
+		<Configuration>$(Configuration)</Configuration>
+	</ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|AnyCPU'">
+	<Reference Include="ImGui.NET">
+		<HintPath>lib\ImGui.NET.dll</HintPath>
+	</Reference>
 	<Reference Include="Nibble">
-		<HintPath>lib\Nibble.dll</HintPath>
-		<!--HintPath>..\..\Nibble\Build\OpenGL_DEBUG\net5.0\win-x64\Nibble.dll</HintPath-->
+	    <HintPath>lib\Nibble.dll</HintPath>
 	</Reference>
   </ItemGroup>
+	
+	
 
   <ItemGroup>
 	<ShaderFiles Include="Shaders\**\*.glsl" />

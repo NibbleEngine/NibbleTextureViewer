@@ -22,11 +22,12 @@ namespace NibbleTextureViewer
         public NbTexture _texture; //Also keep texture Reference here
         private int depth_id = 0;
         private int mipmap_id = 0;
+        private int face_id = 0;
         private bool c_red = true;
         private bool c_green = true;
         private bool c_blue = true;
         private bool c_alpha = true;
-        private string currentDirectory = "E:\\SSD_SteamLibrary1\\steamapps\\common\\No Man's Sky\\GAMEDATA\\TEXTURES\\COMMON\\WEAPONS\\MULTITOOL";
+        private string currentDirectory = "E:\\SSD_SteamLibrary1\\steamapps\\common\\No Man's Sky\\GAMEDATA\\TEXTURES\\SHADER";
         //private string currentDirectory = "D:\\Downloads";
 
         //Imgui stuff
@@ -106,17 +107,25 @@ namespace NibbleTextureViewer
                     ImGui.Text("Width");
                     ImGui.Text("Height");
                     ImGui.Text("Depth");
+                    ImGui.Text("Face");
                     ImGui.Text("MipMapCount");
                     ImGui.Text("Format");
                     ImGui.NextColumn();
                     ImGui.Text(_texture.Data.Width.ToString());
                     ImGui.Text(_texture.Data.Height.ToString());
                     ImGui.Text(_texture.Data.Depth.ToString());
+                    ImGui.Text(_texture.Data.Faces.ToString());
                     ImGui.Text(_texture.Data.MipMapCount.ToString());
 
                     //Make format output a bit friendlier
                     switch (_texture.Data.pif)
                     {
+                        case NbTextureInternalFormat.RGBA16F:
+                            ImGui.Text("RGBA16F");
+                            break;
+                        case NbTextureInternalFormat.RGBA8:
+                            ImGui.Text("RGBA8");
+                            break;
                         case NbTextureInternalFormat.DXT5:
                             ImGui.Text("DXT5");
                             break;
@@ -156,12 +165,22 @@ namespace NibbleTextureViewer
                     ImGui.NextColumn();
                     ImGui.Text("Active Mipmap:");
 
-                    opts = new string[_texture.Data.MipMapCount];
+                    opts = new string[11];
+                    for (int i = 0; i < 11; i++)
+                        opts[i] = i.ToString();
+
+                    ImGui.NextColumn();
+                    ImGui.Combo("##1", ref mipmap_id, opts, 11, 12);
+
+                    ImGui.NextColumn();
+                    ImGui.Text("Active Face:");
+
+                    opts = new string[_texture.Data.Faces];
                     for (int i = 0; i < opts.Length; i++)
                         opts[i] = i.ToString();
 
                     ImGui.NextColumn();
-                    ImGui.Combo("##1", ref mipmap_id, opts, _texture.Data.MipMapCount, 12);
+                    ImGui.Combo("##2", ref face_id, opts, _texture.Data.Faces, 12);
 
                     //Channel Flags
                     ImGui.NextColumn();
@@ -240,7 +259,6 @@ namespace NibbleTextureViewer
                 else if (OpenFileRequestID == 2)
                     ImportLayerEvent?.Invoke(this, currentDirectory, depth_id);
                 oldOpenDialogStatus = false;
-                
             }
 
         }

@@ -27,6 +27,7 @@ namespace NibbleTextureViewer
         private ApplicationLayerStack stack;
         private RenderLayer _renderLayer;
         private UILayer _UILayer;
+        private NbLogger _logger = new();
 
         public TextureRenderer(): base(OpenTK.Windowing.Desktop.GameWindowSettings.Default,
             OpenTK.Windowing.Desktop.NativeWindowSettings.Default)
@@ -34,8 +35,7 @@ namespace NibbleTextureViewer
             Title = "Nibble Texture Viewer " + Version.GetString();
             VSync = VSyncMode.On;
             RenderFrequency = 30;
-            Callbacks.Logger = new NbLogger();
-
+            Callbacks.Log = _logger.Log;
         }
 
         private void OnCloseWindowEvent(object sender, string data)
@@ -101,10 +101,7 @@ namespace NibbleTextureViewer
             if (_texture != null)
                 _texture.Dispose();
             
-            _texture = new NbTexture(filepath);
-            NbCore.Platform.Graphics.GraphicsAPI.GenerateTexture(_texture);
-            NbCore.Platform.Graphics.GraphicsAPI.UploadTexture(_texture);
-            
+            _texture = _engine.CreateTexture(filepath, NbTextureWrapMode.Repeat, NbTextureFilter.NearestMipmapLinear, NbTextureFilter.Nearest);
             _renderLayer.SetTexture(_texture);
             _UILayer.SetTexture(_texture);
         }

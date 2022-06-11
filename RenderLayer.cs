@@ -173,12 +173,12 @@ namespace NibbleTextureViewer
 
                 _shader.CurrentState.AddSampler("InTex", new()
                 {
-                    Texture = _texture
+                    SamplerID = 0,
+                    Texture = _texture,
                 });
 
-                _shader.CurrentState.AddUniform("texture_depth", (float)_renderData.depth_id);
-                //_shader.CurrentState.AddUniform("mipmap", (float)_renderData.mipmap_id);
-                _shader.CurrentState.AddUniform("mipmap", 0.0f);
+                _shader.CurrentState.AddUniform("texture_depth", (float) _renderData.depth_id);
+                _shader.CurrentState.AddUniform("mipmap", (float) _renderData.mipmap_id);
                 _shader.CurrentState.AddUniform("aspect_ratio", (float) _texture.Data.Height / _texture.Data.Width);
                 _shader.CurrentState.AddUniform("scale", _scale);
                 _shader.CurrentState.AddUniform("offset", offset);
