@@ -3,7 +3,7 @@
   <PropertyGroup>
 	<OutputType>Exe</OutputType>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	<LangVersion>9.0</LangVersion>
 	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -33,9 +33,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenTK.Graphics" Version="4.7.1" />
-    <PackageReference Include="OpenTK.Windowing.Desktop" Version="4.7.1" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.1" />
+    <PackageReference Include="OpenTK.Graphics" Version="4.7.4" />
+    <PackageReference Include="OpenTK.Windowing.Desktop" Version="4.7.4" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
   </ItemGroup>
 	
 	
@@ -43,7 +43,7 @@
 	<Reference Include="ImGui.NET">
       <HintPath>lib\ImGui.NET.dll</HintPath>
     </Reference>
-	<ProjectReference Include="..\NibbleDLL\NibbleDLL\NibbleDLL.csproj">
+	<ProjectReference Include="..\Nibble\NibbleDLL\NibbleDLL.csproj">
 		<Configuration>$(Configuration)</Configuration>
 	</ProjectReference>
   </ItemGroup>
@@ -52,32 +52,33 @@
 	<Reference Include="ImGui.NET">
 		<HintPath>lib\ImGui.NET.dll</HintPath>
 	</Reference>
-	<Reference Include="Nibble">
+	  <!--Reference Include="Nibble">
 	    <HintPath>lib\Nibble.dll</HintPath>
-	</Reference>
+		</Reference-->
+	<ProjectReference Include="..\Nibble\NibbleDLL\NibbleDLL.csproj" />
   </ItemGroup>
 	
 	
-
   <ItemGroup>
-	<ShaderFiles Include="Shaders\**\*.glsl" />
+	<Assets Include="Assets\**\*.glsl" />
+	  <Assets Include="Assets\**\*.nb*" />
   </ItemGroup>
 
   <ItemGroup>
-	<Cimgui Include="lib\cimgui\linux-x64\cimgui.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' "/>
-	<Cimgui Include="lib\cimgui\win-x64\cimgui.dll" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' "/>
+	<Cimgui Include="lib\cimgui\linux-x64\cimgui.so" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' " />
+	<Cimgui Include="lib\cimgui\win-x64\cimgui.dll" Condition=" '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' " />
   </ItemGroup>
 	
   <!-- Copy Shaders to the Build Directory-->
   <Target Name="CopyCustomContentBuild" AfterTargets="AfterBuild">
-	<Copy SourceFiles="@(ShaderFiles)" DestinationFolder="$(TargetDir)Shaders" />
+	<Copy SourceFiles="@(Assets)" DestinationFolder="$(TargetDir)Assets\%(RecursiveDir)" />
 	<Copy SourceFiles="@(Cimgui)" DestinationFolder="$(TargetDir)" />
 	<Message Text="Shader files copied successfully." Importance="high" />
   </Target>
 
   <!-- Copy Shaders to the Publish Directory-->
   <Target Name="CopyCustomContentPublish" AfterTargets="Publish">
-	<Copy SourceFiles="@(ShaderFiles)" DestinationFolder="$(PublishDir)Shaders" />
+	<Copy SourceFiles="@(Assets)" DestinationFolder="$(PublishDir)Assets\%(RecursiveDir)" />
 	<Copy SourceFiles="@(Cimgui)" DestinationFolder="$(PublishDir)" />
 	<Message Text="Shader files copied successfully to publish dir." Importance="high" />
   </Target>

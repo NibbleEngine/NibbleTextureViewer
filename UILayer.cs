@@ -3,6 +3,7 @@ using NbCore;
 using ImGuiNET;
 using OpenTK.Windowing.Common;
 using System;
+using NbCore.Platform.Windowing;
 
 namespace NibbleTextureViewer
 {
@@ -34,13 +35,14 @@ namespace NibbleTextureViewer
         private bool IsOpenFileDialogOpen = false;
         private int OpenFileRequestID = -1; // 1: for Open File, 2: for Layer import
         
-        public UILayer(TextureRenderer win, Engine engine) : base(engine)
+        public UILayer(TextureRenderer win, Engine engine) : base(win, engine)
         {
             _winRef = win;
             _ImGuiManager = new(win, engine); //TODO: check why the window is needed
+
         }
 
-        public void OnResize(ResizeEventArgs args)
+        public void OnResize(NbResizeArgs args)
         {
             _ImGuiManager.Resize(args.Width, args.Height);
         }
@@ -50,13 +52,8 @@ namespace NibbleTextureViewer
             _texture = tex;
         }
 
-        public override void OnRenderFrameUpdate(ref Queue<object> data, double dt)
+        public override void OnRenderFrameUpdate(double dt)
         {
-            //First argument should be the input state
-            NbMouseState mouseState = (NbMouseState)data.Dequeue();
-
-            //Send Input
-            _ImGuiManager.SetMouseState(mouseState);
             _ImGuiManager.Update(dt);
 
             DrawUI(_texture);

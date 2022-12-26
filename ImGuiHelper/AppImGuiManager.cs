@@ -3,6 +3,7 @@ using System;
 using ImGuiNET;
 using NbCore;
 using NbCore.UI.ImGui;
+using NbCore.Platform.Windowing;
 
 namespace NibbleTextureViewer
 {
@@ -10,9 +11,9 @@ namespace NibbleTextureViewer
     {
         private bool show_open_file_dialog = false;
         
-        public AppImGuiManager(GameWindow win, Engine engine) : base(win, engine)
+        public AppImGuiManager(NbWindow win, Engine engine) : base(win.ClientSize.X, win.ClientSize.Y, engine)
         {
-
+            SetWindowRef(win);
         }
 
         public void ShowOpenFileDialog()

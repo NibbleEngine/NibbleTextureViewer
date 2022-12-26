@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33209.295
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NibbleTextureViewer", "NibbleTextureViewer.csproj", "{87F95167-31A6-4F51-9658-4EC065ADC0D3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NibbleDLL", "..\Nibble\NibbleDLL\NibbleDLL.csproj", "{64BABF4F-058D-4D53-867D-6A9947110A0F}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "NibbleCore", "..\Nibble\NibbleCore\NibbleCore.shproj", "{53C00CB6-A20B-47AE-93DB-82A187F0D3CD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		OpenGL_DEBUG|Any CPU = OpenGL_DEBUG|Any CPU
+		OpenGL_RELEASE|Any CPU = OpenGL_RELEASE|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{87F95167-31A6-4F51-9658-4EC065ADC0D3}.OpenGL_DEBUG|Any CPU.ActiveCfg = OpenGL_DEBUG|Any CPU
+		{87F95167-31A6-4F51-9658-4EC065ADC0D3}.OpenGL_DEBUG|Any CPU.Build.0 = OpenGL_DEBUG|Any CPU
+		{87F95167-31A6-4F51-9658-4EC065ADC0D3}.OpenGL_RELEASE|Any CPU.ActiveCfg = OpenGL_RELEASE|Any CPU
+		{87F95167-31A6-4F51-9658-4EC065ADC0D3}.OpenGL_RELEASE|Any CPU.Build.0 = OpenGL_RELEASE|Any CPU
+		{64BABF4F-058D-4D53-867D-6A9947110A0F}.OpenGL_DEBUG|Any CPU.ActiveCfg = OpenGL_DEBUG|Any CPU
+		{64BABF4F-058D-4D53-867D-6A9947110A0F}.OpenGL_DEBUG|Any CPU.Build.0 = OpenGL_DEBUG|Any CPU
+		{64BABF4F-058D-4D53-867D-6A9947110A0F}.OpenGL_RELEASE|Any CPU.ActiveCfg = OpenGL_RELEASE|Any CPU
+		{64BABF4F-058D-4D53-867D-6A9947110A0F}.OpenGL_RELEASE|Any CPU.Build.0 = OpenGL_RELEASE|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E1D8F91E-B4F4-42CC-9707-10B56C666F5C}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\Nibble\NibbleCore\NibbleCore.projitems*{53c00cb6-a20b-47ae-93db-82a187f0d3cd}*SharedItemsImports = 13
+		..\Nibble\NibbleCore\NibbleCore.projitems*{64babf4f-058d-4d53-867d-6a9947110a0f}*SharedItemsImports = 5
+	EndGlobalSection
+EndGlobal

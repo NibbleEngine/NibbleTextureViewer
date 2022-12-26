@@ -1,0 +1,7 @@
+{
+  "ObjectType": "NbCore.NbShader",
+  "IsGeneric" : false,
+  "Type" : 0,
+  "Config" : "Texture",
+  "directives" : ["_D_VOLUME_TEXTURE"]
+}

@@ -1,0 +1,14 @@
+{
+  "ObjectType": "NbCore.NbShaderConfig",
+  "Path": "",
+  "Name": "Texture",
+  "ShaderMode": 1,
+  "Sources": [
+    {
+      "VertexShader": "Assets\\Shaders\\Source\\texture_shader_vs.glsl"
+    },
+    {
+      "FragmentShader": "Assets\\Shaders\\Source\\texture_shader_fs.glsl"
+    }
+  ]
+}

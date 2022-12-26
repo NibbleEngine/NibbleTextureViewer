@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using NbCore;
-#if OPENGL
-using NbCore.Platform.Graphics; 
-#endif
+using NbCore.Platform.Graphics;
+using NbCore.Platform.Windowing;
 
 using OpenTK.Windowing.Common;
 
@@ -29,54 +28,34 @@ namespace NibbleTextureViewer
         private NbShader _shaderSingle;
         private bool _captureInput = true;
 
-        public RenderLayer(Engine engine) : base(engine)
+        public RenderLayer(NbWindow win, Engine engine) : base(win, engine)
         {
-            //Default render quad
-            NbCore.Primitives.Quad q = new NbCore.Primitives.Quad();
-
-            NbMesh mesh = new()
-            {
-                Hash = (ulong)"default_renderquad".GetHashCode(),
-                Data = q.geom.GetMeshData(),
-                MetaData = q.geom.GetMetaData(),
-            };
-
-            EngineRef.RegisterEntity(mesh);
-            q.Dispose();
-
-            //Add Shader Sources to engine
-            GLSLShaderSource ss = new("Shaders/texture_shader_vs.glsl", true);
-            ss.Process();
-
-            ss = new("Shaders/texture_shader_fs.glsl", true);
-            ss.Process();
-            
             //Compile Necessary Shaders
-            GLSLShaderConfig conf = EngineRef.CreateShaderConfig(
-                EngineRef.GetShaderSourceByFilePath("Shaders/texture_shader_vs.glsl"),
-                EngineRef.GetShaderSourceByFilePath("Shaders/texture_shader_fs.glsl"),
-                null, null, null, NbShaderMode.DEFAULT, "Texture");
+            //NbShaderConfig conf = EngineRef.CreateShaderConfig(
+            //    EngineRef.GetShaderSourceByFilePath("Shaders/texture_shader_vs.glsl"),
+            //    EngineRef.GetShaderSourceByFilePath("Shaders/texture_shader_fs.glsl"),
+            //    null, null, null, NbShaderMode.DEFAULT, "Texture");
 
 
-            GLSLShaderConfig conf_multitex = EngineRef.CreateShaderConfig(
-                EngineRef.GetShaderSourceByFilePath("Shaders/texture_shader_vs.glsl"),
-                EngineRef.GetShaderSourceByFilePath("Shaders/texture_shader_fs.glsl"),
-                null, null, null, NbShaderMode.DEFAULT, "MultiTexTexture");
+            //NbShaderConfig conf_multitex = EngineRef.CreateShaderConfig(
+            //    EngineRef.GetShaderSourceByFilePath("Shaders/texture_shader_vs.glsl"),
+            //    EngineRef.GetShaderSourceByFilePath("Shaders/texture_shader_fs.glsl"),
+            //    null, null, null, NbShaderMode.DEFAULT, "MultiTexture");
 
-            GLSLShaderConfig conf_voltex = EngineRef.CreateShaderConfig(
-                EngineRef.GetShaderSourceByFilePath("Shaders/texture_shader_vs.glsl"),
-                EngineRef.GetShaderSourceByFilePath("Shaders/texture_shader_fs.glsl"),
-                null, null, null, NbShaderMode.DEFAULT, "VolumeTexture");
+            //NbShaderConfig conf_voltex = EngineRef.CreateShaderConfig(
+            //    EngineRef.GetShaderSourceByFilePath("Shaders/texture_shader_vs.glsl"),
+            //    EngineRef.GetShaderSourceByFilePath("Shaders/texture_shader_fs.glsl"),
+            //    null, null, null, NbShaderMode.DEFAULT, "VolumeTexture");
 
-            _shaderArray = EngineRef.CreateShader(conf_multitex, new() { "_F55_MULTITEXTURE" });
-            EngineRef.CompileShader(_shaderArray);
 
-            _shaderSingle = EngineRef.CreateShader(conf);
-            EngineRef.CompileShader(_shaderSingle);
+            //Fetch shaders
+
+            NbShaderConfig conf = EngineRef.GetShaderConfigByName("Texture");
             
-            _shaderVolume = EngineRef.CreateShader(conf_voltex, new() { "_D_VOLUME_TEXTURE" });
-            EngineRef.CompileShader(_shaderVolume);
-        
+            _shaderSingle = EngineRef.GetShaderByHash(EngineRef.CalculateShaderHash(conf));
+            _shaderArray = EngineRef.GetShaderByHash(EngineRef.CalculateShaderHash(conf, new List<string> {"_F55_MULTITEXTURE"}));
+            _shaderVolume = EngineRef.GetShaderByHash(EngineRef.CalculateShaderHash(conf, new List<string> { "_D_VOLUME_TEXTURE" }));
+
         }
 
         public void OnRenderTextureDataChanged(object sender, RenderTextureData data)
@@ -114,20 +93,18 @@ namespace NibbleTextureViewer
             _size = vec;
         }
 
-        public void OnResize(ResizeEventArgs args)
+        public void OnResize(NbResizeArgs args)
         {
             _size = new NbCore.Math.NbVector2i(args.Width, args.Height);
         }
 
-        public override void OnFrameUpdate(ref Queue<object> data, double dt)
+        public override void OnFrameUpdate(double dt)
         {
             
         }
 
-        public override void OnRenderFrameUpdate(ref Queue<object> data, double dt)
+        public override void OnRenderFrameUpdate(double dt)
         {
-            //First argument should be the input state
-            NbMouseState mouseState = (NbMouseState) data.Dequeue();
             GraphicsAPI renderer = EngineRef.GetSystem<NbCore.Systems.RenderingSystem>().Renderer;
 
             //Compile updated shaders
@@ -138,7 +115,7 @@ namespace NibbleTextureViewer
                 EngineRef.CompileShader(shader);
             }
             
-            renderer.EnableBlend();
+            renderer.SetBlend(true);
             renderer.Viewport(_size.X, _size.Y);
             renderer.ClearColor(new NbCore.Math.NbVector4(0.1f, 0.1f, 0.1f, 0.0f));
             renderer.ClearDrawBuffer(NbBufferMask.Color | NbBufferMask.Depth);
@@ -157,13 +134,13 @@ namespace NibbleTextureViewer
                 if (_captureInput)
                 {
                     //Process Input:
-                    if (mouseState.IsButtonDown(NbMouseButton.LEFT))
+                    if (WindowRef.IsMouseButtonDown(NbMouseButton.LEFT))
                     {
-                        offset.X += mouseState.PositionDelta.X / (_size.X * ((float)_texture.Data.Width / _texture.Data.Height));
-                        offset.Y += mouseState.PositionDelta.Y / _size.Y;
+                        offset.X += WindowRef.MouseDelta.X / (_size.X * ((float)_texture.Data.Width / _texture.Data.Height));
+                        offset.Y += WindowRef.MouseDelta.Y / _size.Y;
                     }
 
-                    _scale = Math.Max(0.05f, _scale + mouseState.Scroll.Y * 0.08f);
+                    _scale = Math.Max(0.05f, _scale + WindowRef.MouseScrollDelta.Y * 0.08f);
 
                     //Console.WriteLine($"{offset.X}, {offset.Y}, {_scale}");
                 }
@@ -186,13 +163,9 @@ namespace NibbleTextureViewer
 
                 renderer.EnableShaderProgram(_shader);
 
-                NbMesh nm = EngineRef.GetMesh((ulong)"default_renderquad".GetHashCode());
+                NbMesh nm = EngineRef.GetMesh(NbHasher.Hash("default_renderquad"));
                 renderer.RenderQuad(nm, _shader, _shader.CurrentState);
             }
-
-
-            //Prepare data for the next layer
-            data.Enqueue(mouseState);
 
         }
 
